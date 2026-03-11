@@ -12,12 +12,12 @@ const STATUS_LABELS = {
   cancelled: 'Cancelado',
 }
 
-const STATUS_COLORS = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  confirmed: 'bg-blue-100 text-blue-800',
-  out_for_delivery: 'bg-purple-100 text-purple-800',
-  completed: 'bg-green-100 text-green-800',
-  cancelled: 'bg-red-100 text-red-800',
+const STATUS_STYLES = {
+  pending:          'bg-amber-100 text-amber-800',
+  confirmed:        'bg-blue-100 text-blue-800',
+  out_for_delivery: 'bg-blueberry/20 text-blueberry',
+  completed:        'bg-green-100 text-green-800',
+  cancelled:        'bg-red-100 text-red-600',
 }
 
 const CANCELLABLE = new Set(['pending', 'confirmed'])
@@ -53,7 +53,7 @@ export default function TrackOrder() {
   }
 
   return (
-    <div className="font-sen min-h-screen bg-gray-50">
+    <div className="page-fade min-h-screen bg-parchment">
       {confirmOrder && (
         <ConfirmModal
           message={`¿Cancelar la orden #${confirmOrder.order_id}?`}
@@ -64,64 +64,77 @@ export default function TrackOrder() {
         />
       )}
 
-      <header className="p-4 flex items-center gap-3">
-        <button
-          onClick={() => navigate('/menu')}
-          className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"
-        >
-          &larr;
-        </button>
-        <span className="text-lg font-semibold text-gray-800">Mis Órdenes</span>
-      </header>
+      <div className="px-5 py-8 space-y-5">
+        <div className="space-y-1">
+          <h1 className="font-display text-3xl font-bold text-espresso">Mis Órdenes</h1>
+          <p className="font-body italic text-espresso/50 text-sm">Historial y seguimiento</p>
+        </div>
 
-      <div className="px-4 pb-8 space-y-4">
         {loading && (
-          <p className="text-center text-gray-400 mt-10">Cargando...</p>
+          <p className="text-center font-body italic text-espresso/40 mt-10">Cargando...</p>
         )}
 
         {!loading && orders.length === 0 && (
-          <p className="text-center text-gray-400 mt-10">No tienes órdenes aún.</p>
+          <div className="text-center py-16 space-y-3">
+            <p className="font-display text-xl text-espresso/40 italic">No tienes órdenes aún.</p>
+            <button
+              onClick={() => navigate('/menu')}
+              className="btn-tap px-6 rounded-2xl bg-terracotta text-white font-display font-semibold text-base active:scale-95 transition"
+            >
+              Ver menú
+            </button>
+          </div>
         )}
 
         {orders.map((order) => (
-          <div key={order.order_id} className="bg-white rounded-2xl shadow p-4 space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="font-bold text-gray-800">Orden #{order.order_id}</span>
-              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[order.current_status]}`}>
-                {STATUS_LABELS[order.current_status]}
+          <div key={order.order_id} className="bg-white rounded-2xl border border-sand/30 shadow-sm overflow-hidden">
+            {/* Order header */}
+            <div className="px-5 py-4 flex justify-between items-center border-b border-sand/20">
+              <span className="font-display font-bold text-espresso text-lg">Orden #{order.order_id}</span>
+              <span className={`px-3 py-1 rounded-full font-mono text-xs font-semibold ${STATUS_STYLES[order.current_status] || 'bg-gray-100 text-gray-600'}`}>
+                {STATUS_LABELS[order.current_status] || order.current_status}
               </span>
             </div>
 
-            <p className="text-xs text-gray-400">
+            {/* Date */}
+            <p className="px-5 pt-3 font-mono text-xs text-espresso/40">
               {new Date(order.order_date).toLocaleString()}
             </p>
 
-            <div className="divide-y">
-              {order.order_items.map((item) => (
-                <div key={item.order_item_id} className="py-2 flex justify-between text-sm">
-                  <span className="text-gray-700">{item.quantity}x {item.product_name || `Producto #${item.product_id}`}</span>
-                  <span className="text-gray-800 font-medium">${Number(item.subtotal).toFixed(2)}</span>
+            {/* Items */}
+            <div className="px-5 py-3">
+              {order.order_items.map((item, idx) => (
+                <div
+                  key={item.order_item_id}
+                  className={`py-2.5 flex justify-between items-center text-sm ${idx > 0 ? 'border-t border-sand/20' : ''}`}
+                >
+                  <span className="font-body text-espresso">{item.quantity}× {item.product_name || `Producto #${item.product_id}`}</span>
+                  <span className="font-display font-bold text-espresso">${Number(item.subtotal).toFixed(2)}</span>
                 </div>
               ))}
             </div>
 
-            <div className="flex justify-between font-bold text-base border-t pt-2">
-              <span>Total</span>
-              <span>${Number(order.total_amount).toFixed(2)}</span>
+            {/* Total */}
+            <div className="px-5 py-3 border-t border-sand/30 flex justify-between items-center">
+              <span className="font-body text-espresso/60 text-sm">Total</span>
+              <span className="font-display font-bold text-lg text-terracotta">${Number(order.total_amount).toFixed(2)}</span>
             </div>
 
+            {/* Cancel button */}
             {CANCELLABLE.has(order.current_status) && (
-              <button
-                onClick={() => setConfirmOrder(order)}
-                disabled={cancellingId === order.order_id}
-                className="w-full py-3 rounded-xl border border-red-400 text-red-500 font-semibold active:scale-95 transition disabled:opacity-50"
-              >
-                {cancellingId === order.order_id ? 'Cancelando...' : 'Cancelar Orden'}
-              </button>
+              <div className="px-5 pb-5">
+                <button
+                  onClick={() => setConfirmOrder(order)}
+                  disabled={cancellingId === order.order_id}
+                  className="btn-tap w-full rounded-xl border border-red-300 text-red-500 font-body font-semibold active:scale-95 transition disabled:opacity-50"
+                >
+                  {cancellingId === order.order_id ? 'Cancelando...' : 'Cancelar Orden'}
+                </button>
+              </div>
             )}
 
             {cancelError && cancellingId === null && (
-              <p className="text-red-500 text-sm text-center">{cancelError}</p>
+              <p className="px-5 pb-4 font-body text-red-500 text-sm text-center">{cancelError}</p>
             )}
           </div>
         ))}

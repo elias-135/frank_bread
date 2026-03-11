@@ -1,5 +1,63 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sen: 'Sen', sans-serif;
+  --color-parchment: #F5EDD9;
+  --color-espresso: #2C1A0E;
+  --color-terracotta: #C4622D;
+  --color-blueberry: #6B4E7D;
+  --color-sand: #D4B896;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Lora', serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+/* Base */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-parchment);
+  color: var(--color-espresso);
+  font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Grain texture overlay */
+.grain-hero {
+  position: relative;
+}
+.grain-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Page fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-fade {
+  animation: fadeIn 0.35s ease-out both;
+}
+
+/* Chalkboard style for Arándanos page */
+.chalkboard {
+  background-color: #1e2a1e;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 31px,
+      rgba(255,255,255,0.03) 31px,
+      rgba(255,255,255,0.03) 32px
+    );
+  color: #e8f5e9;
+}
+
+/* Utility: tap-friendly min-height for buttons */
+.btn-tap {
+  min-height: 48px;
 }

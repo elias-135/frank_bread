@@ -9,61 +9,60 @@ export default function Cart() {
 
   if (items.length === 0) {
     return (
-      <div className="font-sen min-h-screen bg-[#1a1a2e] flex flex-col items-center justify-center px-6">
-        <p className="text-gray-400 text-lg">Tu carrito esta vacio</p>
+      <div className="page-fade min-h-screen bg-parchment flex flex-col items-center justify-center px-5 space-y-6">
+        <p className="font-display text-2xl text-espresso/50 italic">Tu carrito está vacío</p>
         <button
           onClick={() => navigate('/menu')}
-          className="mt-6 w-full py-4 rounded-xl text-white font-semibold text-lg active:scale-95 transition"
-          style={{ backgroundColor: '#56463D' }}
+          className="btn-tap w-full rounded-2xl bg-terracotta text-white font-display font-semibold text-lg tracking-wide active:scale-95 transition"
         >
-          VER MENU
+          Ver Menú
         </button>
       </div>
     )
   }
 
   return (
-    <div className="font-sen min-h-screen bg-[#1a1a2e] flex flex-col">
+    <div className="page-fade min-h-screen bg-parchment flex flex-col">
       {/* Header */}
-      <div className="p-4 flex items-center justify-between">
+      <div className="px-5 py-4 flex items-center justify-between border-b border-sand/40">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/menu')}
-            className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white"
+            className="w-11 h-11 rounded-full bg-sand/40 flex items-center justify-center active:scale-95 transition"
+            aria-label="Volver"
           >
-            &larr;
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5 text-espresso">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
           </button>
-          <span className="text-white text-lg font-semibold">Stock</span>
+          <span className="font-display text-xl font-bold text-espresso">Mi Carrito</span>
         </div>
         <button
           onClick={() => setEditing(!editing)}
-          className="text-amber-400 font-semibold text-sm"
+          className="font-mono text-sm text-terracotta py-2 px-3"
         >
-          {editing ? 'LISTO' : 'EDITAR ITEMS'}
+          {editing ? 'Listo' : 'Editar'}
         </button>
       </div>
 
-      {/* Cart Items */}
-      <div className="flex-1 px-4 space-y-4 overflow-y-auto pb-4">
+      {/* Items */}
+      <div className="flex-1 px-5 py-4 space-y-5 overflow-y-auto">
         {items.map((item) => (
-          <div key={item.product_id}>
-            {/* Row: Image | Name+Price | Remove */}
-            <div className="flex  gap-3">
-              <div className="w-24 h-24 bg-gray-700 rounded-xl flex-shrink-0 overflow-hidden">
-                {item.image_url && (
-                  <img
-                    src={item.image_url}
-                    alt={item.name}
-                    className="w-full h-full object-cover"
-                  />
+          <div key={item.product_id} className="bg-white rounded-2xl p-4 shadow-sm border border-sand/30 space-y-3">
+            <div className="flex gap-3">
+              <div className="w-20 h-20 bg-sand/30 rounded-xl flex-shrink-0 overflow-hidden">
+                {item.image_url ? (
+                  <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-2xl">🍞</div>
                 )}
               </div>
 
               <div className="flex-1 min-w-0">
-                <h3 className="text-white font-semibold text-lg leading-tight">
+                <h3 className="font-display font-bold text-lg text-espresso leading-tight">
                   {item.name}
                 </h3>
-                <p className="text-white font-bold text-lg mt-1">
+                <p className="font-display text-lg font-bold text-terracotta mt-1">
                   ${(Number(item.base_price) * item.quantity).toFixed(0)}
                 </p>
               </div>
@@ -71,29 +70,29 @@ export default function Cart() {
               {editing && (
                 <button
                   onClick={() => removeItem(item.product_id)}
-                  className="w-8 h-8 rounded-full bg-red-500 text-white font-bold flex items-center justify-center flex-shrink-0"
+                  className="w-9 h-9 rounded-full bg-red-100 text-red-500 font-bold flex items-center justify-center flex-shrink-0 active:scale-95 transition"
                 >
-                  &times;
+                  ×
                 </button>
               )}
             </div>
 
-            {/* Quantity Picker — aligned right, same width as row above */}
-            <div className="flex justify-end mt-2">
-              <div className="flex items-center gap-3 bg-white/10 rounded-full px-2 py-1">
+            {/* Quantity picker */}
+            <div className="flex justify-end">
+              <div className="flex items-center gap-3 bg-espresso/10 rounded-full px-2 py-1">
                 <button
                   onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
-                  className="w-7 h-7 rounded-full bg-white/20 text-white font-bold flex items-center justify-center"
+                  className="w-9 h-9 rounded-full bg-espresso/20 text-espresso font-bold flex items-center justify-center active:scale-95 transition"
                 >
-                  -
+                  −
                 </button>
-                <span className="text-white font-bold min-w-[20px] text-center">
+                <span className="font-mono font-bold text-espresso min-w-[20px] text-center">
                   {item.quantity}
                 </span>
                 <button
                   onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
                   disabled={item.quantity >= (item.quantity_available || Infinity)}
-                  className="w-7 h-7 rounded-full bg-white/20 text-white font-bold flex items-center justify-center disabled:opacity-30"
+                  className="w-9 h-9 rounded-full bg-espresso/20 text-espresso font-bold flex items-center justify-center active:scale-95 transition disabled:opacity-30"
                 >
                   +
                 </button>
@@ -103,18 +102,18 @@ export default function Cart() {
         ))}
       </div>
 
-      {/* Bottom — Total + Continue */}
-      <div className="p-4 space-y-4">
-        <p className="text-white text-2xl font-bold text-center">
-          Total: ${totalAmount.toFixed(0)}
-        </p>
+      {/* Bottom */}
+      <div className="border-t border-sand/40 bg-white px-5 py-5 space-y-4">
+        <div className="flex justify-between items-center">
+          <span className="font-body text-espresso/60">Total</span>
+          <span className="font-display text-3xl font-bold text-espresso">${totalAmount.toFixed(0)}</span>
+        </div>
 
         <button
           onClick={() => navigate('/checkout')}
-          className="w-full py-4 rounded-xl text-white font-semibold text-lg active:scale-95 transition"
-          style={{ backgroundColor: '#56463D' }}
+          className="btn-tap w-full rounded-2xl bg-terracotta text-white font-display font-semibold text-lg tracking-wide active:scale-95 transition shadow-md"
         >
-          CONTINUAR
+          Continuar al pago
         </button>
       </div>
     </div>

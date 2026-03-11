@@ -115,7 +115,7 @@ export default function OrderManage() {
                 className="py-2 flex justify-between"
               >
                 <span>
-                  {item.quantity}x Item #{item.bread_product_id}
+                  {item.quantity}× {item.product_name || `Producto #${item.bread_product_id}`}
                 </span>
                 <span className="font-medium">
                   ${Number(item.subtotal).toFixed(2)}

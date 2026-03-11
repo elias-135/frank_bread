@@ -13,42 +13,51 @@ export default function AddedToCart() {
   const total = Number(product.base_price) * quantity
 
   return (
-    <div className="font-sen min-h-screen bg-white flex flex-col items-center px-6">
-      <div className="flex-1 flex flex-col items-center justify-center text-center">
-        <div className="w-48 h-48 bg-gray-300 rounded-2xl overflow-hidden mb-4">
-          {product.image_url && (
+    <div className="page-fade min-h-screen bg-parchment flex flex-col items-center px-5">
+      <div className="flex-1 flex flex-col items-center justify-center text-center space-y-5 py-10">
+        {/* Product image */}
+        <div className="w-44 h-44 bg-sand/30 rounded-2xl overflow-hidden border border-sand/40">
+          {product.image_url ? (
             <img
               src={product.image_url}
               alt={product.bread_name}
               className="w-full h-full object-cover"
             />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="text-5xl">🍞</span>
+            </div>
           )}
         </div>
 
-        <h2 className="text-xl font-bold text-gray-800">
-          {product.bread_name} Agregado!
-        </h2>
-        <p className="text-lg text-gray-500 mt-2">
+        <div className="space-y-1">
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-2xl">✓</span>
+            <h2 className="font-display text-2xl font-bold text-espresso">
+              {product.bread_name || product.name}
+            </h2>
+          </div>
+          <p className="font-body italic text-espresso/60">agregado al carrito</p>
+        </div>
+
+        <p className="font-display text-3xl font-bold text-terracotta">
           ${total.toFixed(0)}
         </p>
       </div>
 
-      <div className="w-full pb-8 space-y-4">
+      <div className="w-full pb-10 space-y-3">
         <button
           onClick={() => navigate('/menu')}
-          className="w-full py-4 rounded-xl text-white font-semibold text-lg active:scale-95 transition"
-          style={{ backgroundColor: '#56463D' }}
+          className="btn-tap w-full rounded-2xl bg-espresso text-parchment font-display font-semibold text-lg tracking-wide active:scale-95 transition"
         >
-          SEGUIR COMPRANDO
+          Seguir comprando
         </button>
 
         <button
           onClick={() => navigate('/cart')}
-          className="w-full py-4 rounded-xl text-white font-semibold text-lg active:scale-95 transition flex items-center justify-center gap-2"
-          style={{ backgroundColor: '#56463D' }}
+          className="btn-tap w-full rounded-2xl border-2 border-espresso text-espresso font-display font-semibold text-lg tracking-wide active:scale-95 transition"
         >
-          VER CARRITO
-          <span>&#128188;</span>
+          Ver carrito
         </button>
       </div>
     </div>

@@ -16,12 +16,11 @@ export default function Checkout() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 gap-4">
-        <p className="text-gray-600 text-center">Debes iniciar sesión para continuar.</p>
+      <div className="page-fade min-h-screen bg-parchment flex flex-col items-center justify-center px-5 gap-4">
+        <p className="font-body text-espresso/70 text-center">Debes iniciar sesión para continuar.</p>
         <button
           onClick={() => navigate('/login')}
-          className="w-full py-4 rounded-xl text-white font-semibold text-lg active:scale-95 transition"
-          style={{ backgroundColor: '#56463D' }}
+          className="btn-tap w-full rounded-2xl bg-terracotta text-white font-display font-semibold text-lg active:scale-95 transition"
         >
           Iniciar sesión
         </button>
@@ -58,7 +57,7 @@ export default function Checkout() {
   }
 
   return (
-    <div className="font-sen min-h-screen bg-gray-50 flex flex-col">
+    <div className="page-fade min-h-screen bg-parchment flex flex-col">
       {showConfirm && (
         <ConfirmModal
           message="¿Confirmar y colocar la orden?"
@@ -67,70 +66,80 @@ export default function Checkout() {
           onCancel={() => setShowConfirm(false)}
         />
       )}
+
       {/* Header */}
-      <div className="p-4 flex items-center gap-3">
+      <div className="px-5 py-4 flex items-center gap-3 border-b border-sand/40">
         <button
           onClick={() => navigate('/cart')}
-          className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"
+          className="w-11 h-11 rounded-full bg-sand/40 flex items-center justify-center active:scale-95 transition"
+          aria-label="Volver"
         >
-          <span className="text-lg">&lsaquo;</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5 text-espresso">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
         </button>
-        <span className="text-lg font-semibold text-gray-800">Confirmar Pedido</span>
+        <span className="font-display text-xl font-bold text-espresso">Confirmar Pedido</span>
       </div>
 
-      {/* User info summary */}
-      <div className="flex-1 px-6 space-y-4">
-        <div className="bg-white rounded-xl p-4 space-y-3 shadow-sm">
+      {/* Body */}
+      <div className="flex-1 px-5 py-5 space-y-4">
+        {/* User info */}
+        <div className="bg-white rounded-2xl p-5 space-y-4 border border-sand/30 shadow-sm">
           <div className="flex justify-between items-center">
-            <span className="text-xs font-semibold text-gray-500 tracking-wider">TUS DATOS</span>
+            <span className="font-mono text-xs text-espresso/50 tracking-widest uppercase">Tus datos</span>
             <button
               onClick={() => { logout(); navigate('/login') }}
-              className="text-xs text-amber-700 underline"
+              className="font-mono text-xs text-terracotta"
             >
               Cambiar
             </button>
           </div>
 
-          <div>
-            <p className="text-xs text-gray-400">Nombre</p>
-            <p className="text-gray-800 font-medium">{user.name}</p>
-          </div>
-          <div>
-            <p className="text-xs text-gray-400">Teléfono</p>
-            <p className="text-gray-800 font-medium">{user.phone}</p>
-          </div>
-          <div>
-            <div className="flex justify-between items-center">
-              <p className="text-xs text-gray-400">Dirección</p>
-              <button
-                onClick={() => {
-                  if (editingAddress) login({ ...user, address })
-                  setEditingAddress(!editingAddress)
-                }}
-                className="text-xs text-amber-700 underline"
-              >
-                {editingAddress ? 'Guardar' : 'Editar'}
-              </button>
+          <div className="space-y-3">
+            <div>
+              <p className="font-mono text-xs text-espresso/40 uppercase">Nombre</p>
+              <p className="font-body text-espresso font-medium mt-0.5">{user.name}</p>
             </div>
-            {editingAddress ? (
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className="w-full mt-1 bg-gray-100 rounded-lg px-3 py-2 text-gray-800 outline-none text-sm"
-              />
-            ) : (
-              <p className="text-gray-800 font-medium">{address}</p>
-            )}
+            <div>
+              <p className="font-mono text-xs text-espresso/40 uppercase">Teléfono</p>
+              <p className="font-body text-espresso font-medium mt-0.5">{user.phone}</p>
+            </div>
+            <div>
+              <div className="flex justify-between items-center">
+                <p className="font-mono text-xs text-espresso/40 uppercase">Dirección</p>
+                <button
+                  onClick={() => {
+                    if (editingAddress) login({ ...user, address })
+                    setEditingAddress(!editingAddress)
+                  }}
+                  className="font-mono text-xs text-terracotta"
+                >
+                  {editingAddress ? 'Guardar' : 'Editar'}
+                </button>
+              </div>
+              {editingAddress ? (
+                <input
+                  type="text"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  className="w-full mt-1 bg-parchment border border-sand rounded-lg px-3 py-2 font-body text-espresso text-base outline-none focus:border-terracotta transition"
+                />
+              ) : (
+                <p className="font-body text-espresso font-medium mt-0.5">{address}</p>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Order items summary */}
-        <div className="bg-white rounded-xl p-4 shadow-sm divide-y">
-          {items.map((item) => (
-            <div key={item.product_id} className="py-2 flex justify-between text-sm">
-              <span className="text-gray-700">{item.quantity}x {item.name}</span>
-              <span className="text-amber-700 font-medium">
+        {/* Order items */}
+        <div className="bg-white rounded-2xl border border-sand/30 shadow-sm overflow-hidden">
+          {items.map((item, idx) => (
+            <div
+              key={item.product_id}
+              className={`px-5 py-3 flex justify-between items-center text-base ${idx > 0 ? 'border-t border-sand/30' : ''}`}
+            >
+              <span className="font-body text-espresso">{item.quantity}× {item.name}</span>
+              <span className="font-display font-bold text-terracotta">
                 ${(item.base_price * item.quantity).toFixed(2)}
               </span>
             </div>
@@ -138,19 +147,19 @@ export default function Checkout() {
         </div>
       </div>
 
-      {/* Bottom — Total + Place Order */}
-      <div className="p-6 space-y-4">
-        <p className="text-gray-800 text-2xl font-bold text-center">
-          Total: ${totalAmount.toFixed(2)}
-        </p>
+      {/* Bottom */}
+      <div className="border-t border-sand/40 bg-white px-5 py-5 space-y-4">
+        <div className="flex justify-between items-center">
+          <span className="font-body text-espresso/60">Total</span>
+          <span className="font-display text-3xl font-bold text-espresso">${totalAmount.toFixed(2)}</span>
+        </div>
 
         <button
           onClick={() => setShowConfirm(true)}
           disabled={submitting || items.length === 0}
-          className="w-full py-4 rounded-xl text-white font-semibold text-lg active:scale-95 transition disabled:opacity-50"
-          style={{ backgroundColor: '#56463D' }}
+          className="btn-tap w-full rounded-2xl bg-terracotta text-white font-display font-semibold text-lg tracking-wide active:scale-95 transition disabled:opacity-50 shadow-md"
         >
-          {submitting ? 'PROCESANDO...' : 'COLOCAR ÓRDEN'}
+          {submitting ? 'Procesando...' : 'Colocar Órden'}
         </button>
       </div>
     </div>

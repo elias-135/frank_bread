@@ -26,92 +26,97 @@ export default function ProductDetail() {
   }
 
   return (
-    <div className="font-sen min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <div className="p-4 flex items-center gap-3">
+    <div className="page-fade min-h-screen bg-parchment flex flex-col">
+      {/* Back header */}
+      <div className="px-5 py-4 flex items-center gap-3">
         <button
           onClick={() => navigate('/menu')}
-          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
+          className="w-11 h-11 rounded-full bg-sand/40 flex items-center justify-center active:scale-95 transition"
+          aria-label="Volver"
         >
-          <span className="text-lg">&larr;</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5 text-espresso">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
         </button>
-        <span className="text-lg font-semibold">Detalles</span>
+        <span className="font-display text-lg font-bold text-espresso">Detalles</span>
       </div>
 
-      {/* Product Image */}
-      <div className="mx-4 h-48 bg-gray-300 rounded-2xl overflow-hidden">
-        {product.image_url && (
+      {/* Product image */}
+      <div className="mx-5 h-52 bg-sand/30 rounded-2xl overflow-hidden border border-sand/40">
+        {product.image_url ? (
           <img
             src={product.image_url}
             alt={product.bread_name}
             className="w-full h-full object-cover"
           />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="text-6xl opacity-20">🍞</span>
+          </div>
         )}
       </div>
 
-      {/* Product Info */}
-      <div className="p-4 flex-1">
-        <h1 className="text-2xl font-bold text-gray-800">
-          {product.bread_name}
+      {/* Info */}
+      <div className="px-5 py-5 flex-1 space-y-3">
+        <h1 className="font-display text-3xl font-bold text-espresso leading-tight">
+          {product.bread_name || product.name}
         </h1>
-        <p className="text-sm text-gray-400 mt-2 leading-relaxed">
-          {product.description}
-        </p>
+        {product.description && (
+          <p className="font-body text-base text-espresso/70 leading-relaxed">
+            {product.description}
+          </p>
+        )}
 
-        <div className="flex items-center gap-6 mt-4 text-sm text-gray-500">
-          <div className="flex items-center gap-1">
-            <span>&#128666;</span>
-            <span>Free</span>
+        <div className="flex items-center gap-5 pt-1">
+          <div className="flex items-center gap-1.5 font-mono text-sm text-espresso/50">
+            <span>🚚</span>
+            <span>Gratis</span>
           </div>
-          <div className="flex items-center gap-1">
-            <span>&#128336;</span>
-            <span>20 min</span>
+          <div className="flex items-center gap-1.5 font-mono text-sm text-espresso/50">
+            <span>⏱</span>
+            <span>~20 min</span>
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar — Price + Quantity + Add to Cart */}
-      <div className="border-t bg-gray-50 p-4 space-y-4">
+      {/* Bottom bar */}
+      <div className="border-t border-sand/50 bg-white px-5 py-5 space-y-4">
         <div className="flex justify-between items-center">
-          <p className="text-2xl font-bold text-gray-800">
+          <p className="font-display text-3xl font-bold text-espresso">
             ${(Number(product.base_price) * quantity).toFixed(2)}
           </p>
 
-          <div
-            className="flex items-center rounded-full px-1 py-1 gap-3"
-            style={{ backgroundColor: '#56463D' }}
-          >
+          <div className="flex items-center rounded-full bg-espresso px-1 py-1 gap-3">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-8 h-8 rounded-full bg-white/20 text-white font-bold flex items-center justify-center"
+              className="w-10 h-10 rounded-full bg-white/20 text-parchment font-bold flex items-center justify-center active:scale-95 transition"
             >
-              -
+              −
             </button>
-            <span className="text-white font-bold min-w-[20px] text-center">
+            <span className="text-parchment font-bold font-mono min-w-[20px] text-center">
               {quantity}
             </span>
             <button
               onClick={() => setQuantity(Math.min(quantity + 1, Math.max(maxAvailable, 1)))}
               disabled={quantity >= maxAvailable}
-              className="w-8 h-8 rounded-full bg-white/20 text-white font-bold flex items-center justify-center disabled:opacity-30"
+              className="w-10 h-10 rounded-full bg-white/20 text-parchment font-bold flex items-center justify-center active:scale-95 transition disabled:opacity-30"
             >
               +
             </button>
           </div>
         </div>
 
-        <p className="text-xs text-gray-400 text-right">
+        <p className="font-mono text-xs text-espresso/40 text-right">
           {maxAvailable > 0 ? `${maxAvailable} disponibles` : 'Sin stock'}
-          {alreadyInCart > 0 && ` (${alreadyInCart} en carrito)`}
+          {alreadyInCart > 0 && ` · ${alreadyInCart} en carrito`}
         </p>
 
         <button
           onClick={handleAddToCart}
           disabled={maxAvailable <= 0}
-          className="w-full py-4 rounded-xl text-white font-semibold text-lg active:scale-95 transition disabled:opacity-50"
-          style={{ backgroundColor: '#56463D' }}
+          className="btn-tap w-full rounded-2xl bg-terracotta text-white font-display font-semibold text-lg tracking-wide active:scale-95 transition disabled:opacity-50 shadow-md"
         >
-          {maxAvailable <= 0 ? 'SIN STOCK' : 'AGREGAR AL CARRITO'}
+          {maxAvailable <= 0 ? 'Sin stock' : 'Agregar al carrito'}
         </button>
       </div>
     </div>
